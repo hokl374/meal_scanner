@@ -67,17 +67,23 @@ class db_connector:
             cursor.executemany(sql, values)
         self.connection.commit()
     
-    def read_records(self, table, read_fields, condition_text):
+    def read_records(self, table, read_fields, condition_text = None, orderby_text = None, rows_returned = None):
         
         with self.connection.cursor() as cursor:
             read_text = ", ".join(read_fields)
-            sql = ("SELECT %s " % read_text) + ("FROM %s WHERE (" % table) + condition_text + ")"
-            cursor.execute(sql)      
+            sql = ("SELECT %s " % read_text) + ("FROM %s" % table)
+            if condition_text != None:
+                sql += ' WHERE (' + condition_text + ')'
+            if orderby_text != None:
+                sql += ' ORDER BY ' + orderby_text
+            if rows_returned != None:
+                sql += ' LIMIT ' + str(rows_returned)
+            cursor.execute(sql)
             result = cursor.fetchall()
         
         return result
     
-    def edit_records_from_id(self, table, record_id_name, record_ids, fields, *values):
+    def edit_records_from_id(self, table, record_id_name, record_ids, fields, values):
         
         #Values = [[Field1Rec1, Field1Rec2, Field1Rec3...], [Field2Rec1, Field2Rec2, Field2Rec3...]...]
         
@@ -85,7 +91,7 @@ class db_connector:
             
             condition_text = record_id_name + " <=> %s"
             
-            update_text = " SET " + "%s = \'%s\'" * len(fields)
+            update_text = " SET " + ', '.join(["%s = \'%s\'"] * len(fields))
             
             new_fields = [[x]*len(values[0]) for x in fields]
             field_value_lst = []
@@ -96,14 +102,15 @@ class db_connector:
             
             field_value_lst.append(record_ids)
             zipped_inputs = list(zip(*field_value_lst))
+            print(len(zipped_inputs))
             
             sql = "UPDATE " + table + update_text + " WHERE " + condition_text
             rows_updated = 0
             for qry in zipped_inputs:
+                print(sql%qry)
                 rows_updated += cursor.execute(sql%qry)
             
         self.connection.commit()
-        
         print(str(rows_updated) + " rows updated!")
         return rows_updated
             

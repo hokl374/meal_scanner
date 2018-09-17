@@ -47,25 +47,26 @@ class flight_manager:
         flight_id = listify(flight_id)
         fields = listify(fields)
         values = listify(values)
+        values = list(map(listify, values))
         
         num_rows_updated = self.db_connector.edit_records_from_id('flight', 'flight_id', flight_id,fields,values)
         print("Successfully updated!" if num_rows_updated == 1 else "No rows updated!")
-        return
+        return num_rows_updated
     
-    def get_flight_ids(self, condition_text):
-        result = self.db_connector.read_records('flight',['flight_id'],condition_text)
+    def get_flight_ids(self, condition_text = None, orderby_text = None, rows_returned = None):
+        result = self.db_connector.read_records('flight',['flight_id'],condition_text, orderby_text, rows_returned)
         return list(map(lambda x: x[0], result))
     
     #Build get_flight_ids from flight number and departure time
     
-    def get_flight_details(self, get_fields, flight_ids):
-        get_fields = ['flight_id'] + listify(get_fields)
+    def get_flight_details(self, get_fields, flight_ids, orderby_text = None, rows_returned = None):
+        get_fields = ['flight_id'] + listify(get_fields) if get_fields != '*' else listify(get_fields)
         flight_ids = listify(flight_ids)
         
         flight_ids = list(map(lambda x: str(x), flight_ids))
         condition_text = ",".join(flight_ids)
         
-        result = self.db_connector.read_records('flight', get_fields, 'flight_id IN (' + condition_text +")")
+        result = self.db_connector.read_records('flight', get_fields, 'flight_id IN (' + condition_text +")", orderby_text, rows_returned)
         return list(result)
 
 

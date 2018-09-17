@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>createFlightDialog</class>
+ <widget class="QDialog" name="createFlightDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>260</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>260</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>500</width>
+    <height>260</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>11</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>10</y>
+     <width>81</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+   <property name="centerButtons">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QWidget" name="formLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>390</width>
+     <height>240</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="flightNumberLabel">
+      <property name="toolTip">
+       <string extracomment="Enter Flight Number Here (Maximum 3 Numbers)">Enter Flight Number Here (Maximum 3 Numbers)</string>
+      </property>
+      <property name="text">
+       <string>Flight Number</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="flightNumberLineEdit">
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>3</number>
+      </property>
+      <property name="frame">
+       <bool>true</bool>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Normal</enum>
+      </property>
+      <property name="cursorPosition">
+       <number>0</number>
+      </property>
+      <property name="placeholderText">
+       <string extracomment="Enter Flight Number Here (Maximum 3 Numbers)">e.g. 235</string>
+      </property>
+      <property name="cursorMoveStyle">
+       <enum>Qt::VisualMoveStyle</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="departureAirportLabel">
+      <property name="toolTip">
+       <string extracomment="Enter IATA Code">Enter IATA Code</string>
+      </property>
+      <property name="text">
+       <string>Departure Airport</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="departureAirportLineEdit">
+      <property name="toolTip">
+       <string extracomment="Enter IATA Code">Enter IATA Code</string>
+      </property>
+      <property name="maxLength">
+       <number>3</number>
+      </property>
+      <property name="placeholderText">
+       <string extracomment="Enter IATA Code">e.g. SIN</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="arrivalAirportLabel">
+      <property name="text">
+       <string>Arrival Airport</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="arrivalAirportLineEdit">
+      <property name="maxLength">
+       <number>3</number>
+      </property>
+      <property name="placeholderText">
+       <string extracomment="Enter IATA Code">e.g. SIN</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="departureDateTimeLabel">
+      <property name="text">
+       <string>Departure</string>
+      </property>
+      <property name="buddy">
+       <cstring>departureDateTimeEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QDateTimeEdit" name="departureDateTimeEdit">
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2018</year>
+        <month>9</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="scheduledArrivalLabel">
+      <property name="text">
+       <string>Scheduled Arrival</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QDateTimeEdit" name="scheduledArrivalDateTimeEdit">
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2018</year>
+        <month>9</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="estimatedArrivalLabel">
+      <property name="text">
+       <string>Estimated Arrival</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QDateTimeEdit" name="estimatedArrivalDateTimeEdit">
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2018</year>
+        <month>9</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="currentSection">
+       <enum>QDateTimeEdit::MonthSection</enum>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="numberOfPassengersLabel">
+      <property name="text">
+       <string>Number of Passengers</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QSpinBox" name="numberOfPassengersSpinBox">
+      <property name="maximum">
+       <number>999</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>createFlightDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>createFlightDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
