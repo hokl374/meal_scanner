@@ -74,7 +74,8 @@ if __name__ == "__main__":
     
     class QStandardItemCustom(QtGui.QStandardItem):
         #Suitable for int, float, datetime, str
-        def __init__(self, data = None, itemType = str):
+        def __init__(self, data = None, itemType = str, colourRange = None):
+            #colourRange takes a tuple/list of 2 numbers (a,b). From a to between a & b to b --> Red, Yellow, Green
             super().__init__()
             self.itemType = itemType
             from_str_reference = {int:int, str:str, float:float, datetime.datetime: lambda x: datetime.datetime.strptime(x,'%Y-%m-%d %H:%M:%S')}
@@ -83,6 +84,24 @@ if __name__ == "__main__":
             self.from_string = from_str_reference[itemType]
             if data:
                 self.setData(data)
+            if colourRange:
+                a,b = colourRange
+                redBrush,yellowBrush,greenBrush = QtGui.QBrush(QtGui.QColor(255,107,107)),QtGui.QBrush(QtGui.QColor(255,234,128)),QtGui.QBrush(QtGui.QColor(77,255,77))
+                clean_data = self.convert_none(data)
+                if a<=b:
+                    if clean_data<a:
+                        self.setData(redBrush,QtCore.Qt.BackgroundRole)
+                    elif clean_data<b:
+                        self.setData(yellowBrush,QtCore.Qt.BackgroundRole)
+                    else:
+                        self.setData(greenBrush,QtCore.Qt.BackgroundRole)
+                else:
+                    if clean_data>a:
+                        self.setData(redBrush,QtCore.Qt.BackgroundRole)
+                    elif clean_data>b:
+                        self.setData(yellowBrush,QtCore.Qt.BackgroundRole)
+                    else:
+                        self.setData(greenBrush,QtCore.Qt.BackgroundRole)
             return
         
         def data(self, role = QtCore.Qt.UserRole+1):
@@ -110,20 +129,27 @@ if __name__ == "__main__":
         ## MAIN WINDOW METHODS ##
         def __init__(self, manager, parent = None):
             self.models = {}
-            self.headers = {'flight': ['Flight ID', 'Flight Number', 'Departure Airport', 'Arrival Airport', 'Departure Date/Time', 'Arrival Date/Time', 'Total Passengers', 'Passengers: First', 'Passengers: Business', 'Passengers: Economy'],\
-                            'schedule': ['Meal ID', 'Flight ID','Booking Class','Meal Type','Service Order','Time Served'],\
+            self.headers = {'flight': ['Flight ID', 'Flight Number', 'Departure Airport', 'Arrival Airport', 'Departure Date/Time', 'Arrival Date/Time', 'Total Passengers', 'Passengers: First', 'Passengers: Business', 'Passengers: Economy','% Wastage'],\
+                            'schedule': ['Meal ID', 'Flight ID','Booking Class','Meal Type','Service Order','Time Served', '% Wastage'],\
                             'option': ['Option ID', 'Meal ID', 'Option Code', 'Option Name', 'Weight (g)', 'Colour', 'Units Uplifted', 'Units Leftover', '% Wastage']}
             self.fields = {'flight': ['flight_id','flight_number', 'departure_airport_iata', 'arrival_airport_iata', 'departure_datetime', 'arrival_datetime', 'number_passengers_economy + number_passengers_first + number_passengers_business','number_passengers_first','number_passengers_business','number_passengers_economy'],\
                            'schedule':['meal_id','flight_id','booking_class','meal_type','service_order','time_served'],\
                            'option': ['option_id', 'meal_id', 'option_code', 'option_name', 'weight', 'colour', 'units_uplifted','units_leftover','ROUND(units_leftover/units_uplifted*100)']}
             self.itemTypes = {'flight': [int,int,str,str,datetime.datetime,datetime.datetime,int,int,int,int,int],\
-                              'schedule':[int,int,str,str,int,datetime.datetime],\
+                              'schedule':[int,int,str,str,int,datetime.datetime,int],\
                               'option': [int,int,str,str,int,str,int,int,int]}
+            self.editable = {'flight':[False,True,True,True,True,True,False,True,True,True,False],\
+                             'schedule': [False,True,True,True,True,True,False],\
+                             'option':[False,True,True,True,True,True,True,True,False]}
+            self.colourRange = {'flight':[None]*10 + [(25,10)],\
+                                'schedule':[None]*6 + [(25,10)],\
+                                'option': [None]*8 + [(25,10)]}
             self.changelog = []
             
             super().__init__(parent = parent)
-            self.manager = manager
             self.setupUi(self)
+            self.show()
+            self.manager = manager
             self.setupFlightTable()
             self.setupScheduleTable()
             self.setupOptionTable()
@@ -132,14 +158,14 @@ if __name__ == "__main__":
             self.Flight_SearchButton.clicked.connect(self.openSearchFlightDialog)
             self.Flight_UpdateButton.clicked.connect(self.updateFlights)
             self.scanLeftoversButton.clicked.connect(self.scanLeftovers)
+            self.Flight_ViewMealScheduleButton.clicked.connect(self.viewMealSchedule)
             self.MealSchedule_CreateButton.clicked.connect(self.openCreateScheduleDialog)
             self.MealSchedule_SearchButton.clicked.connect(self.openSearchScheduleDialog)
             self.MealSchedule_UpdateButton.clicked.connect(self.updateSchedule)
+            self.MealSchedule_ViewMealOptionButton.clicked.connect(self.viewMealOption)
             self.MealOption_CreateButton.clicked.connect(self.openCreateOptionDialog)
             self.MealOption_SearchButton.clicked.connect(self.openSearchOptionDialog)
             self.MealOption_UpdateButton.clicked.connect(self.updateOption)
-                      
-            self.show()
         
         def log_change(self,item):
             self.changelog.append(item)
@@ -165,16 +191,23 @@ if __name__ == "__main__":
             flight_ids = self.manager.flight_manager.get_flight_ids(orderby_text = 'departure_datetime DESC', rows_returned = 200)
             data = self.manager.flight_manager.get_flight_details(self.fields['flight'][1:], flight_ids, orderby_text = 'departure_datetime DESC', rows_returned = 200)
             
-            for rec in data:
-                item = QStandardItemCustom(rec[0],itemType = self.itemTypes['flight'][0])
-                item.setEditable(False)
-                items = [item]
-                for i in range(1,len(rec)):
-                    el = rec[i]
-                    item = QStandardItemCustom(el, itemType = self.itemTypes['flight'][i])
-                    item.setEditable(True)
-                    items.append(item)
-                flightModel.appendRow(items)
+            sql = 'SELECT ROUND(SUM(meals.leftover)/SUM(meals.uplift)*100) FROM flight LEFT JOIN (SELECT meal_schedule.meal_id, meal_schedule.flight_id, SUM(meal_options.units_uplifted) AS uplift, SUM(meal_options.units_leftover) AS leftover FROM meal_schedule LEFT JOIN meal_options ON meal_schedule.meal_id = meal_options.meal_id GROUP BY meal_schedule.meal_id) AS meals ON flight.flight_id = meals.flight_id\
+                    WHERE flight.flight_id <=> %s GROUP BY flight.flight_id'
+            
+            with self.manager.db_connector.connection.cursor() as cursor:
+                for rec in data:
+                    rec = list(rec)
+                    cursor.execute(sql%str(rec[0]))
+                    wastage = cursor.fetchone()[0]
+                    rec.append(wastage)
+                    items = []
+                    for i in range(len(rec)):
+                        el = rec[i]
+                        item = QStandardItemCustom(el, itemType = self.itemTypes['flight'][i], colourRange = self.colourRange['flight'][i])
+                        item.setEditable(self.editable['flight'][i])
+                        items.append(item)
+                    
+                    flightModel.appendRow(items)
             
             def update_data(item):
                 self.log_change(item)
@@ -192,18 +225,23 @@ if __name__ == "__main__":
             return
         
         def updateFlightTable(self,data):
-            self.models['flight'].removeRows(0,self.models['flight'].rowCount())
-            
-            for rec in data:
-                item = QStandardItemCustom(rec[0],itemType = self.itemTypes['flight'][0])
-                item.setEditable(False)
-                items = [item]
-                for i in range(1,len(rec)):
-                    el = rec[i]
-                    item = QStandardItemCustom(el, itemType = self.itemTypes['flight'][i])
-                    item.setEditable(True)
-                    items.append(item)
-                self.models['flight'].appendRow(items)
+            self.models['flight'].removeRows(0,self.models['flight'].rowCount())  
+            sql = 'SELECT ROUND(SUM(meals.leftover)/SUM(meals.uplift)*100) FROM flight LEFT JOIN (SELECT meal_schedule.meal_id, meal_schedule.flight_id, SUM(meal_options.units_uplifted) AS uplift, SUM(meal_options.units_leftover) AS leftover FROM meal_schedule LEFT JOIN meal_options ON meal_schedule.meal_id = meal_options.meal_id GROUP BY meal_schedule.meal_id) AS meals ON flight.flight_id = meals.flight_id\
+            WHERE flight.flight_id <=> %s GROUP BY flight.flight_id'
+            with self.manager.db_connector.connection.cursor() as cursor:
+                for rec in data:
+                    rec = list(rec)
+                    cursor.execute(sql%str(rec[0]))
+                    wastage = cursor.fetchone()[0]
+                    rec.append(wastage)
+                    items = []
+                    for i in range(len(rec)):
+                        el = rec[i]
+                        item = QStandardItemCustom(el, itemType = self.itemTypes['flight'][i], colourRange = self.colourRange['flight'][i])
+                        item.setEditable(self.editable['flight'][i])
+                        items.append(item)
+                    
+                    self.models['flight'].appendRow(items)
             
             self.Flight_Table.setModel(self.models['flight'])
             
@@ -261,6 +299,25 @@ if __name__ == "__main__":
                 QtWidgets.QMessageBox.information(self, 'Done!', "All leftovers successfully uploaded!")
             return
         
+        def viewMealSchedule(self):
+            select = self.Flight_Table.selectionModel()
+            selectedRows = select.selectedRows()
+            
+            if len(selectedRows) < 1:
+                QtWidgets.QMessageBox.information(self, 'View Meal Schedule', "Please select at least one flight to view!")
+                return
+            flight_ids = list(map(lambda x: x.data(), selectedRows))
+            meal_ids = []
+            for flight_id in flight_ids:
+                meal_ids.extend(self.manager.meal_schedule_manager.get_meal_ids_from_flight_id(flight_id))
+            if meal_ids == []:
+                QtWidgets.QMessageBox.warning(self, 'No records found!', 'No records found!')
+            else:
+                data = self.manager.meal_schedule_manager.get_meal_details(self.fields['schedule'][1:], meal_ids, orderby_text = 'meal_id DESC')
+                self.updateScheduleTable(data)
+                self.tabWidget.setCurrentIndex(1)
+            return
+        
         ## MEAL SCHEDULE MANAGER METHODS ##
         def openCreateScheduleDialog(self):
             if 'createscheduledialog' not in mem:
@@ -282,16 +339,21 @@ if __name__ == "__main__":
             meal_ids = self.manager.meal_schedule_manager.get_meal_ids(rows_returned = 200)
             data = self.manager.meal_schedule_manager.get_meal_details(self.fields['schedule'][1:], meal_ids, orderby_text = 'meal_id DESC', rows_returned = 200)
             
-            for rec in data:
-                item = QStandardItemCustom(rec[0],itemType = self.itemTypes['schedule'][0])
-                item.setEditable(False)
-                items = [item]
-                for i in range(1,len(rec)):
-                    el = rec[i]
-                    item = QStandardItemCustom(el, itemType = self.itemTypes['schedule'][i])
-                    item.setEditable(True)
-                    items.append(item)
-                scheduleModel.appendRow(items)
+            sql = 'SELECT ROUND(SUM(meal_options.units_leftover)/SUM(meal_options.units_uplifted)*100) FROM meal_schedule LEFT JOIN meal_options ON meal_schedule.meal_id = meal_options.meal_id WHERE meal_schedule.meal_id = %s GROUP BY meal_schedule.meal_id'
+            
+            with self.manager.db_connector.connection.cursor() as cursor:
+                for rec in data:
+                    rec = list(rec)
+                    cursor.execute(sql%str(rec[0]))
+                    wastage = cursor.fetchone()[0]
+                    rec.append(wastage)
+                    items = []
+                    for i in range(len(rec)):
+                        el = rec[i]
+                        item = QStandardItemCustom(el, itemType = self.itemTypes['schedule'][i], colourRange = self.colourRange['schedule'][i])
+                        item.setEditable(self.editable['schedule'][i])
+                        items.append(item)
+                    scheduleModel.appendRow(items)
             
             def update_data(item):
                 self.log_change(item)
@@ -309,18 +371,21 @@ if __name__ == "__main__":
         
         def updateScheduleTable(self,data):
             self.models['schedule'].removeRows(0,self.models['schedule'].rowCount())
-            
-            for rec in data:
-                item = QStandardItemCustom(rec[0],itemType = self.itemTypes['schedule'][0])
-                item.setEditable(False)
-                items = [item]
-                for i in range(1,len(rec)):
-                    el = rec[i]
-                    item = QStandardItemCustom(el, itemType = self.itemTypes['schedule'][i])
-                    item.setEditable(True)
-                    items.append(item)
-                self.models['schedule'].appendRow(items)
-            
+            sql = 'SELECT ROUND(SUM(meal_options.units_leftover)/SUM(meal_options.units_uplifted)*100) FROM meal_schedule LEFT JOIN meal_options ON meal_schedule.meal_id = meal_options.meal_id WHERE meal_schedule.meal_id = %s GROUP BY meal_schedule.meal_id'
+            with self.manager.db_connector.connection.cursor() as cursor:
+                for rec in data:
+                    rec = list(rec)
+                    cursor.execute(sql%str(rec[0]))
+                    wastage = cursor.fetchone()[0]
+                    rec.append(wastage)
+                    items = []
+                    for i in range(len(rec)):
+                        el = rec[i]
+                        item = QStandardItemCustom(el, itemType = self.itemTypes['schedule'][i], colourRange = self.colourRange['schedule'][i])
+                        item.setEditable(self.editable['schedule'][i])
+                        items.append(item)
+                    self.models['schedule'].appendRow(items)
+
             self.MealSchedule_Table.setModel(self.models['schedule'])
             
             return
@@ -346,6 +411,25 @@ if __name__ == "__main__":
             QtWidgets.QMessageBox.information(self, 'Updated Meal Schedule', "Successfully updated meal schedule records!")
             return
         
+        def viewMealOption(self):
+            select = self.MealSchedule_Table.selectionModel()
+            selectedRows = select.selectedRows()
+            if len(selectedRows) < 1:
+                QtWidgets.QMessageBox.information(self, 'View Meal Option', "Please select at least meal to view!")
+                return
+            meal_ids = list(map(lambda x: x.data(), selectedRows))
+            option_ids = []
+            for meal_id in meal_ids:
+                option_ids.extend(self.manager.meal_option_manager.get_meal_option_ids_from_meal_ids(meal_id))
+            
+            if option_ids == []:
+                QtWidgets.QMessageBox.warning(self, 'No records found!', 'No records found!')
+            else:
+                data = self.manager.meal_option_manager.get_meal_option_details(self.fields['option'][1:], option_ids, orderby_text = 'option_id DESC')
+                self.updateOptionTable(data)
+                self.tabWidget.setCurrentIndex(2)
+            return
+        
         ## MEAL OPTION MANAGER METHODS ##
         def openCreateOptionDialog(self):
             if 'createoptiondialog' not in mem:
@@ -368,13 +452,11 @@ if __name__ == "__main__":
             data = self.manager.meal_option_manager.get_meal_option_details(self.fields['option'][1:], option_ids, orderby_text = 'option_id DESC', rows_returned = 200)
             
             for rec in data:
-                item = QStandardItemCustom(rec[0],itemType = self.itemTypes['option'][0])
-                item.setEditable(False)
-                items = [item]
-                for i in range(1,len(rec)):
+                items = []
+                for i in range(len(rec)):
                     el = rec[i]
-                    item = QStandardItemCustom(el, itemType = self.itemTypes['option'][i])
-                    item.setEditable(True)
+                    item = QStandardItemCustom(el, itemType = self.itemTypes['option'][i], colourRange = self.colourRange['option'][i])
+                    item.setEditable(self.editable['option'][i])
                     items.append(item)
                 optionModel.appendRow(items)
             
@@ -396,13 +478,11 @@ if __name__ == "__main__":
             self.models['option'].removeRows(0,self.models['option'].rowCount())
             
             for rec in data:
-                item = QStandardItemCustom(rec[0],itemType = self.itemTypes['option'][0])
-                item.setEditable(False)
-                items = [item]
-                for i in range(1,len(rec)):
+                items = []
+                for i in range(len(rec)):
                     el = rec[i]
-                    item = QStandardItemCustom(el, itemType = self.itemTypes['option'][i])
-                    item.setEditable(True)
+                    item = QStandardItemCustom(el, itemType = self.itemTypes['option'][i], colourRange = self.colourRange['option'][i])
+                    item.setEditable(self.editable['option'][i])
                     items.append(item)
                 self.models['option'].appendRow(items)
             
@@ -475,6 +555,11 @@ if __name__ == "__main__":
             try:
                 record_id = self.parent().manager.flight_manager.create_flight(**params)
                 QtWidgets.QMessageBox.information(self, 'Record Added', "Added flight record! Flight ID = " + str(record_id))
+                
+                data = self.parent().manager.meal_option_manager.get_api_meal_options(record_id)
+                self.parent().manager.meal_option_manager.initial_upload_meal_options(record_id,data)
+                
+                QtWidgets.QMessageBox.information(self, 'Meals Added', "Added meals for Flight ID = " + str(record_id) + "!")
             
             except Exception as ex:
                 QtWidgets.QMessageBox.warning(self, 'Error', ex.__str__())

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1600</width>
-    <height>793</height>
+    <height>788</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -93,6 +93,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="Flight_ViewMealScheduleButton">
+            <property name="text">
+             <string>View Meals Served on Selected Flight</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -116,7 +123,7 @@
            <bool>true</bool>
           </attribute>
           <attribute name="horizontalHeaderDefaultSectionSize">
-           <number>150</number>
+           <number>135</number>
           </attribute>
           <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
            <bool>true</bool>
@@ -156,6 +163,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="MealSchedule_ViewMealOptionButton">
+            <property name="text">
+             <string>View Options for Selected Meal</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -163,8 +177,11 @@
           <property name="alternatingRowColors">
            <bool>true</bool>
           </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
-           <number>150</number>
+           <number>135</number>
           </attribute>
          </widget>
         </item>
@@ -205,8 +222,11 @@
           <property name="alternatingRowColors">
            <bool>true</bool>
           </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
-           <number>150</number>
+           <number>135</number>
           </attribute>
          </widget>
         </item>
