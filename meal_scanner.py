@@ -97,7 +97,7 @@ class meal_scanner:
             for decodedObject in decodedObjectsNew: 
                 if decodedObject.type != 'QRCODE':
                     continue
-                x_centre = decodedObject.xcentre
+                #x_centre = decodedObject.xcentre
                 x_left = decodedObject.rect.left
                 
                 empty_frame = 0

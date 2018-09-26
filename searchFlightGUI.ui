@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>305</height>
+    <width>781</width>
+    <height>355</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -55,59 +55,16 @@
      <x>10</x>
      <y>10</y>
      <width>671</width>
-     <height>282</height>
+     <height>341</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="7" column="2">
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <item>
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>between</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <property name="indent">
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="numberOfPassengersSpinBox">
-        <property name="maximum">
-         <number>999</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>and</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <property name="indent">
-         <number>18</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="numberOfPassengersSpinBox_2">
-        <property name="maximum">
-         <number>999</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
+    <item row="4" column="1">
+     <widget class="QCheckBox" name="departureDateTimeCheckBox">
+      <property name="text">
+       <string>Departure Date/Time</string>
+      </property>
+     </widget>
     </item>
     <item row="2" column="1">
      <widget class="QCheckBox" name="departureAirportCheckBox">
@@ -116,17 +73,95 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
-     <widget class="QCheckBox" name="estimatedArrivalCheckBox">
+    <item row="1" column="1">
+     <widget class="QCheckBox" name="flightNumberCheckBox">
       <property name="text">
-       <string>Estimated Arrival</string>
+       <string>Flight Number</string>
+      </property>
+      <property name="tristate">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
-    <item row="6" column="2">
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item row="0" column="1">
+     <widget class="QCheckBox" name="flightIdCheckBox">
+      <property name="text">
+       <string>Flight ID</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLineEdit" name="flightIdLineEdit">
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>3</number>
+      </property>
+      <property name="frame">
+       <bool>true</bool>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Normal</enum>
+      </property>
+      <property name="cursorPosition">
+       <number>0</number>
+      </property>
+      <property name="placeholderText">
+       <string extracomment="Enter Flight ID Here">e.g. 15</string>
+      </property>
+      <property name="cursorMoveStyle">
+       <enum>Qt::VisualMoveStyle</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QCheckBox" name="passengersEconomyCheckBox">
+      <property name="text">
+       <string>#Passengers (Economy)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QCheckBox" name="arrivalCheckBox">
+      <property name="text">
+       <string>Arrival Date/Time</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLineEdit" name="departureAirportLineEdit">
+      <property name="toolTip">
+       <string extracomment="Enter IATA Code">Enter IATA Code</string>
+      </property>
+      <property name="maxLength">
+       <number>3</number>
+      </property>
+      <property name="placeholderText">
+       <string extracomment="Enter IATA Code">e.g. SIN</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QLineEdit" name="arrivalAirportLineEdit">
+      <property name="maxLength">
+       <number>3</number>
+      </property>
+      <property name="placeholderText">
+       <string extracomment="Enter IATA Code">e.g. SIN</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="label_3">
         <property name="text">
          <string>between</string>
         </property>
@@ -139,7 +174,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QDateTimeEdit" name="estimatedArrivalDateTimeEdit">
+       <widget class="QDateTimeEdit" name="arrivalDateTimeEdit">
         <property name="dateTime">
          <datetime>
           <hour>0</hour>
@@ -156,7 +191,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="label_6">
         <property name="text">
          <string>and</string>
         </property>
@@ -172,7 +207,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QDateTimeEdit" name="estimatedArrivalDateTimeEdit_2">
+       <widget class="QDateTimeEdit" name="arrivalDateTimeEdit_2">
         <property name="dateTime">
          <datetime>
           <hour>0</hour>
@@ -257,34 +292,6 @@
       </item>
      </layout>
     </item>
-    <item row="3" column="1">
-     <widget class="QCheckBox" name="arrivalAirportLabelCheckBox">
-      <property name="text">
-       <string>Arrival Airport</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QCheckBox" name="numberOfPassengersCheckBox">
-      <property name="text">
-       <string>Number of Passengers</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QCheckBox" name="scheduledArrivalCheckBox">
-      <property name="text">
-       <string>Scheduled Arrival</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QCheckBox" name="departureDateTimeCheckBox">
-      <property name="text">
-       <string>Departure</string>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="2">
      <widget class="QLineEdit" name="flightNumberLineEdit">
       <property name="toolTip">
@@ -316,78 +323,15 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QCheckBox" name="flightNumberCheckBox">
-      <property name="text">
-       <string>Flight Number</string>
-      </property>
-      <property name="tristate">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QLineEdit" name="departureAirportLineEdit">
-      <property name="toolTip">
-       <string extracomment="Enter IATA Code">Enter IATA Code</string>
-      </property>
-      <property name="maxLength">
-       <number>3</number>
-      </property>
-      <property name="placeholderText">
-       <string extracomment="Enter IATA Code">e.g. SIN</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
-     <widget class="QLineEdit" name="arrivalAirportLineEdit">
-      <property name="maxLength">
-       <number>3</number>
-      </property>
-      <property name="placeholderText">
-       <string extracomment="Enter IATA Code">e.g. SIN</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="2">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item row="6" column="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label_5">
         <property name="text">
          <string>between</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="indent">
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDateTimeEdit" name="scheduledArrivalDateTimeEdit">
-        <property name="dateTime">
-         <datetime>
-          <hour>0</hour>
-          <minute>0</minute>
-          <second>0</second>
-          <year>2018</year>
-          <month>9</month>
-          <day>1</day>
-         </datetime>
-        </property>
-        <property name="calendarPopup">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>and</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
         </property>
         <property name="margin">
          <number>0</number>
@@ -398,61 +342,157 @@
        </widget>
       </item>
       <item>
-       <widget class="QDateTimeEdit" name="scheduledArrivalDateTimeEdit_2">
-        <property name="dateTime">
-         <datetime>
-          <hour>0</hour>
-          <minute>0</minute>
-          <second>0</second>
-          <year>2018</year>
-          <month>9</month>
-          <day>1</day>
-         </datetime>
+       <widget class="QSpinBox" name="passengersEconomySpinBox">
+        <property name="maximum">
+         <number>999</number>
         </property>
-        <property name="calendarPopup">
-         <bool>true</bool>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>and</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <property name="indent">
+         <number>18</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="passengersEconomySpinBox_2">
+        <property name="maximum">
+         <number>999</number>
         </property>
        </widget>
       </item>
      </layout>
     </item>
-    <item row="0" column="1">
-     <widget class="QCheckBox" name="flightIdCheckBox">
+    <item row="3" column="1">
+     <widget class="QCheckBox" name="arrivalAirportLabelCheckBox">
       <property name="text">
-       <string>Flight ID</string>
+       <string>Arrival Airport</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="2">
-     <widget class="QLineEdit" name="flightIdLineEdit">
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="inputMask">
-       <string/>
-      </property>
+    <item row="7" column="1">
+     <widget class="QCheckBox" name="passengersBusinessCheckBox">
       <property name="text">
-       <string/>
-      </property>
-      <property name="maxLength">
-       <number>3</number>
-      </property>
-      <property name="frame">
-       <bool>true</bool>
-      </property>
-      <property name="echoMode">
-       <enum>QLineEdit::Normal</enum>
-      </property>
-      <property name="cursorPosition">
-       <number>0</number>
-      </property>
-      <property name="placeholderText">
-       <string extracomment="Enter Flight Number Here (Maximum 3 Numbers)">e.g. 235</string>
-      </property>
-      <property name="cursorMoveStyle">
-       <enum>Qt::VisualMoveStyle</enum>
+       <string>#Passengers (Business)</string>
       </property>
      </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QCheckBox" name="passengersFirstCheckBox">
+      <property name="text">
+       <string>#Passengers (First)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>between</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <property name="indent">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="passengersBusinessSpinBox">
+        <property name="maximum">
+         <number>999</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>and</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <property name="indent">
+         <number>18</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="passengersBusinessSpinBox_2">
+        <property name="maximum">
+         <number>999</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="8" column="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>between</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <property name="indent">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="passengersFirstSpinBox">
+        <property name="maximum">
+         <number>999</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>and</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <property name="indent">
+         <number>18</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="passengersFirstSpinBox_2">
+        <property name="maximum">
+         <number>999</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

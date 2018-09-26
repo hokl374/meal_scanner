@@ -102,16 +102,16 @@ class db_connector:
             
             field_value_lst.append(record_ids)
             zipped_inputs = list(zip(*field_value_lst))
-            print(len(zipped_inputs))
+            #print(len(zipped_inputs))
             
             sql = "UPDATE " + table + update_text + " WHERE " + condition_text
             rows_updated = 0
             for qry in zipped_inputs:
-                print(sql%qry)
+                #print(sql%qry)
                 rows_updated += cursor.execute(sql%qry)
             
         self.connection.commit()
-        print(str(rows_updated) + " rows updated!")
+        #print(str(rows_updated) + " rows updated!")
         return rows_updated
             
             
