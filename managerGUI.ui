@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1600</width>
-    <height>788</height>
+    <height>773</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -68,14 +68,21 @@
           <item>
            <widget class="QPushButton" name="Flight_CreateButton">
             <property name="text">
-             <string>Create New</string>
+             <string>Create New Flight</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="Flight_SearchButton">
             <property name="text">
-             <string>Search</string>
+             <string>Search Flights</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="Flight_RefreshButton">
+            <property name="text">
+             <string>Refresh Table</string>
             </property>
            </widget>
           </item>
@@ -145,14 +152,21 @@
           <item>
            <widget class="QPushButton" name="MealSchedule_CreateButton">
             <property name="text">
-             <string>Create New</string>
+             <string>Create New Meal</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="MealSchedule_SearchButton">
             <property name="text">
-             <string>Search</string>
+             <string>Search Meals</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="MealSchedule_RefreshButton">
+            <property name="text">
+             <string>Refresh Table</string>
             </property>
            </widget>
           </item>
@@ -197,14 +211,21 @@
           <item>
            <widget class="QPushButton" name="MealOption_CreateButton">
             <property name="text">
-             <string>Create New</string>
+             <string>Create New Meal Option</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="MealOption_SearchButton">
             <property name="text">
-             <string>Search</string>
+             <string>Search Meal Options</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="MealOption_RefreshButton">
+            <property name="text">
+             <string>Refresh Table</string>
             </property>
            </widget>
           </item>

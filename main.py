@@ -156,15 +156,18 @@ if __name__ == "__main__":
             
             self.Flight_CreateButton.clicked.connect(self.openCreateFlightDialog)
             self.Flight_SearchButton.clicked.connect(self.openSearchFlightDialog)
+            self.Flight_RefreshButton.clicked.connect(self.refreshFlightTable)
             self.Flight_UpdateButton.clicked.connect(self.updateFlights)
             self.scanLeftoversButton.clicked.connect(self.scanLeftovers)
             self.Flight_ViewMealScheduleButton.clicked.connect(self.viewMealSchedule)
             self.MealSchedule_CreateButton.clicked.connect(self.openCreateScheduleDialog)
             self.MealSchedule_SearchButton.clicked.connect(self.openSearchScheduleDialog)
+            self.MealSchedule_RefreshButton.clicked.connect(self.refreshScheduleTable)
             self.MealSchedule_UpdateButton.clicked.connect(self.updateSchedule)
             self.MealSchedule_ViewMealOptionButton.clicked.connect(self.viewMealOption)
             self.MealOption_CreateButton.clicked.connect(self.openCreateOptionDialog)
             self.MealOption_SearchButton.clicked.connect(self.openSearchOptionDialog)
+            self.MealOption_RefreshButton.clicked.connect(self.refreshOptionTable)
             self.MealOption_UpdateButton.clicked.connect(self.updateOption)
         
         def log_change(self,item):
@@ -245,6 +248,15 @@ if __name__ == "__main__":
             
             self.Flight_Table.setModel(self.models['flight'])
             
+            return
+        
+        def refreshFlightTable(self):
+            flight_ids = self.manager.flight_manager.get_flight_ids(rows_returned = 200)
+            if flight_ids == []:
+                data = []
+            else:
+                data = self.manager.flight_manager.get_flight_details(self.fields['flight'][1:], flight_ids, orderby_text = 'flight_id DESC')
+            self.updateFlightTable(data)
             return
             
         
@@ -390,6 +402,15 @@ if __name__ == "__main__":
             
             return
         
+        def refreshScheduleTable(self):
+            meal_ids = self.manager.meal_schedule_manager.get_meal_ids(rows_returned = 200)
+            if meal_ids == []:
+                data = []
+            else:
+                data = self.manager.meal_schedule_manager.get_meal_details(self.fields['schedule'][1:], meal_ids, orderby_text = 'meal_id DESC')
+            self.updateScheduleTable(data)
+            return
+        
         def updateSchedule(self):
             scheduleModel = self.models['schedule']
             itemsChanged = list(filter(lambda x: x.model() == scheduleModel,self.changelog))
@@ -490,6 +511,15 @@ if __name__ == "__main__":
             
             return
         
+        def refreshOptionTable(self):
+            option_ids = self.manager.meal_option_manager.get_meal_option_ids(rows_returned = 200)
+            if option_ids == []:
+                data = []
+            else:
+                data = self.manager.meal_option_manager.get_meal_option_details(self.fields['option'][1:], option_ids, orderby_text = 'option_id DESC')
+            self.updateOptionTable(data)
+            return
+        
         def updateOption(self):
             optionModel = self.models['option']
             itemsChanged = list(filter(lambda x: x.model() == optionModel,self.changelog))
@@ -554,13 +584,18 @@ if __name__ == "__main__":
             
             try:
                 record_id = self.parent().manager.flight_manager.create_flight(**params)
-                QtWidgets.QMessageBox.information(self, 'Record Added', "Added flight record! Flight ID = " + str(record_id))
+                self.parent().refreshFlightTable()
+                QtWidgets.QMessageBox.information(self, 'Record Added', "Added flight record! Flight ID = " + str(record_id) + ". Click OK to fetch information on meals...")
                 
                 data = self.parent().manager.meal_option_manager.get_api_meal_options(record_id)
-                self.parent().manager.meal_option_manager.initial_upload_meal_options(record_id,data)
-                
-                QtWidgets.QMessageBox.information(self, 'Meals Added', "Added meals for Flight ID = " + str(record_id) + "!")
-            
+                if data == None:
+                    QtWidgets.QMessageBox.information(self, 'No Meals Found', "No meals found for Flight ID = " + str(record_id) + ".")
+                else:
+                    self.parent().manager.meal_option_manager.initial_upload_meal_options(record_id,data)              
+                    QtWidgets.QMessageBox.information(self, 'Meals Added', "Added meals for Flight ID = " + str(record_id) + ".")
+                    self.parent().refreshScheduleTable()
+                    self.parent().refreshOptionTable()
+
             except Exception as ex:
                 QtWidgets.QMessageBox.warning(self, 'Error', ex.__str__())
     
@@ -650,7 +685,7 @@ if __name__ == "__main__":
             try:
                 record_id = self.parent().manager.meal_schedule_manager.create_meal(**params)
                 QtWidgets.QMessageBox.information(self, 'Record Added', "Added meal schedule record! Meal ID = " + str(record_id))
-            
+                self.parent().refreshScheduleTable()
             except Exception as ex:
                 QtWidgets.QMessageBox.warning(self, 'Error', ex.__str__())
     
@@ -724,7 +759,7 @@ if __name__ == "__main__":
             try:
                 record_id = self.parent().manager.meal_option_manager.create_meal_option(**params)
                 QtWidgets.QMessageBox.information(self, 'Record Added', "Added meal option record! Option ID = " + str(record_id))
-            
+                self.parent().refreshScheduleTable()
             except Exception as ex:
                 QtWidgets.QMessageBox.warning(self, 'Error', ex.__str__())
     
