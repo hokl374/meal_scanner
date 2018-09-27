@@ -6,7 +6,6 @@ Created on Mon Sep 10 00:36:59 2018
 """
 
 import pyzbar.pyzbar as pyzbar
-import numpy as np
 import cv2
 import time
 from collections import namedtuple
