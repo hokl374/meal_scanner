@@ -146,7 +146,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Singapore Airlines - In-flight Catering Manager"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Singapore Airlines - Food Waste Management System"))
         self.Flight_CreateButton.setText(_translate("MainWindow", "Create New Flight"))
         self.Flight_SearchButton.setText(_translate("MainWindow", "Search Flights"))
         self.Flight_RefreshButton.setText(_translate("MainWindow", "Refresh Table"))
