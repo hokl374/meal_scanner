@@ -4,10 +4,11 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\hokl3\\Documents\\Work\\University\\Y1S1\\SIA App Challenge\\Code\\meal_scanner\\meal_scanner'],
+             pathex=['C:\\Users\\User\\dist\\Final'],
              binaries=[],
              datas=[],
              hiddenimports=[],
+             added_files = [('C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python37-32\\Lib\\site-packages\\pyzbar', 'pyzbar')],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -29,4 +30,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=False )
+          console=False)

@@ -36,30 +36,30 @@ if __name__ == "__main__":
     
 #    guiModules = [('loginGUI.py','loginGUI.ui'), ('managerGUI.py', 'managerGUI.ui'), ('createFlightGUI.py', 'createFlightGUI.ui'),('searchFlightGUI.py','searchFlightGUI.ui')]
     
-    with open('loginGUI.py', 'w+') as fout:
-        uic.compileUi('loginGUI.ui', fout)
-    
-    with open('managerGUI.py', 'w+') as fout:
-        uic.compileUi('managerGUI.ui', fout)
-    
-    with open('createFlightGUI.py', 'w+') as fout:
-        uic.compileUi('createFlightGUI.ui', fout)
-        
-    with open('searchFlightGUI.py', 'w+') as fout:
-        uic.compileUi('searchFlightGUI.ui', fout)
-    
-    with open('createMealScheduleGUI.py','w+') as fout:
-        uic.compileUi('createMealScheduleGUI.ui', fout)
-
-    with open('searchMealScheduleGUI.py','w+') as fout:
-        uic.compileUi('searchMealScheduleGUI.ui', fout)
-        
-    with open('createMealOptionGUI.py','w+') as fout:
-        uic.compileUi('createMealOptionGUI.ui', fout)
-
-    with open('searchMealOptionGUI.py','w+') as fout:
-        uic.compileUi('searchMealOptionGUI.ui', fout)
-    
+#    with open('loginGUI.py', 'w+') as fout:
+#        uic.compileUi('loginGUI.ui', fout)
+#    
+#    with open('managerGUI.py', 'w+') as fout:
+#        uic.compileUi('managerGUI.ui', fout)
+#    
+#    with open('createFlightGUI.py', 'w+') as fout:
+#        uic.compileUi('createFlightGUI.ui', fout)
+#        
+#    with open('searchFlightGUI.py', 'w+') as fout:
+#        uic.compileUi('searchFlightGUI.ui', fout)
+#    
+#    with open('createMealScheduleGUI.py','w+') as fout:
+#        uic.compileUi('createMealScheduleGUI.ui', fout)
+#
+#    with open('searchMealScheduleGUI.py','w+') as fout:
+#        uic.compileUi('searchMealScheduleGUI.ui', fout)
+#        
+#    with open('createMealOptionGUI.py','w+') as fout:
+#        uic.compileUi('createMealOptionGUI.ui', fout)
+#
+#    with open('searchMealOptionGUI.py','w+') as fout:
+#        uic.compileUi('searchMealOptionGUI.ui', fout)
+#    
     
     from loginGUI import Ui_loginDialog
     from managerGUI import Ui_MainWindow
